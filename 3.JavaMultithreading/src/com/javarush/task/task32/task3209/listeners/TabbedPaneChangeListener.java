@@ -6,11 +6,16 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 /**
- * Created by 1 on 06.09.2017.
+ * Created by 1 on 19.12.2017.
+ * Этот класс будет слушать и обрабатывать изменения состояния панели вкладок.
  */
 public class TabbedPaneChangeListener implements ChangeListener {
     private View view;
 
+    /**
+     *
+     * @param view представление.
+     */
     public TabbedPaneChangeListener(View view) {
         this.view = view;
     }

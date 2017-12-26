@@ -6,17 +6,22 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 /**
- * Created by 1 on 06.09.2017.
+ * Created by 1 on 19.12.2017.
  */
 public class FrameListener extends WindowAdapter {
     private View view;
 
+    /**
+     * Constructor.
+     * @param view отображение.
+     */
     public FrameListener(View view) {
         this.view = view;
     }
 
     @Override
-    public void windowClosing(WindowEvent windowEvent) {
+    public void windowClosing(WindowEvent e) {
+        super.windowClosing(e);
         view.exit();
     }
 }
