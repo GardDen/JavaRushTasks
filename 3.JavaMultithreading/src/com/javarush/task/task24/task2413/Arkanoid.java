@@ -69,7 +69,7 @@ public class Arkanoid {
      * Рисуем на холсте границы
      */
     private void drawBorders(Canvas canvas) {
-        //draw games
+        //draw Games
         for (int i = 0; i < width + 2; i++) {
             for (int j = 0; j < height + 2; j++) {
                 canvas.setPoint(i, j, '.');

@@ -125,25 +125,25 @@ public class Controller {
         //23.2.1. Установить новое значение currentFile.
         if (returnVal == jFileChooser.APPROVE_OPTION) {
             currentFile = jFileChooser.getSelectedFile();
-        }
-        //23.2.2. Сбросить документ.
-        resetDocument();
-        //23.2.3. Установить имя файла в заголовок у представления.
-        view.setTitle(currentFile.getName());
-        //23.2.4. Создать FileReader, используя currentFile.
-        try {
-            FileReader fileReader = new FileReader(currentFile);
-            //23.2.5. Вычитать данные из FileReader-а в документ document с помощью объекта класса HTMLEditorKit.
-            new HTMLEditorKit().read(fileReader, document, 0);
-            //23.2.6. Сбросить правки (вызвать метод resetUndo представления).
-            view.resetUndo();
-            //23.2.7. Если возникнут исключения - залогируй их и не пробрасывай наружу.
-        } catch (FileNotFoundException e) {
-            ExceptionHandler.log(e);
-        } catch (BadLocationException e) {
-            ExceptionHandler.log(e);
-        } catch (IOException e) {
-            ExceptionHandler.log(e);
+            //23.2.2. Сбросить документ.
+            resetDocument();
+            //23.2.3. Установить имя файла в заголовок у представления.
+            view.setTitle(currentFile.getName());
+            //23.2.4. Создать FileReader, используя currentFile.
+            try {
+                FileReader fileReader = new FileReader(currentFile);
+                //23.2.5. Вычитать данные из FileReader-а в документ document с помощью объекта класса HTMLEditorKit.
+                new HTMLEditorKit().read(fileReader, document, 0);
+                //23.2.6. Сбросить правки (вызвать метод resetUndo представления).
+                view.resetUndo();
+                //23.2.7. Если возникнут исключения - залогируй их и не пробрасывай наружу.
+            } catch (FileNotFoundException e) {
+                ExceptionHandler.log(e);
+            } catch (BadLocationException e) {
+                ExceptionHandler.log(e);
+            } catch (IOException e) {
+                ExceptionHandler.log(e);
+            }
         }
 
 
@@ -155,16 +155,14 @@ public class Controller {
      * а использовать currentFile. Если currentFile равен null, то вызывать метод saveDocumentAs().
      */
     public void saveDocument() {
-        if (currentFile == null) {
-            saveDocumentAs();
-        } else {
+        if (currentFile == null) saveDocumentAs();
+        else {
+            view.selectHtmlTab();
+            view.setTitle(currentFile.getName());
             try {
                 FileWriter fileWriter = new FileWriter(currentFile);
                 new HTMLEditorKit().write(fileWriter, document, 0, document.getLength());
-
-            } catch (BadLocationException e) {
-                ExceptionHandler.log(e);
-            } catch (IOException e) {
+            } catch (Exception e) {
                 ExceptionHandler.log(e);
             }
         }

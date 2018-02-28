@@ -72,14 +72,14 @@ public class Hippodrome {
         return winner;
 
         /*int numberWinner = 0;
-        Horse horseWin = games.getHorses().get(0);
+        Horse horseWin = Games.getHorses().get(0);
         for (int i = 1; i < 3; i++) {
-            if (horseWin.getDistance() < games.getHorses().get(i).getDistance()) {
-                horseWin = games.getHorses().get(i);
+            if (horseWin.getDistance() < Games.getHorses().get(i).getDistance()) {
+                horseWin = Games.getHorses().get(i);
                 numberWinner = i;
             }
         }
-        return games.getHorses().get(numberWinner);*/
+        return Games.getHorses().get(numberWinner);*/
     }
 
     public void printWinner() {
