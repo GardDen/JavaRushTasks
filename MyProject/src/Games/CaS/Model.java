@@ -5,6 +5,8 @@ import Games.CaS.players.Human;
 import Games.CaS.players.Player;
 
 import java.io.*;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.LinkedHashSet;
 
 import static Games.CaS.ConcoleHelper.readNumber;
@@ -20,8 +22,8 @@ public class Model {
     private static final String VALUE_INITIAL = ".";
     private static final int FIELD_WIDTH = 3;
     private static final int FIELD_HEIGHT = 3;
-    private static final String FILE_NAME =
-            "D:\\Google Диск\\Project\\Java\\JavaRushTasks\\MyProject\\src\\Games\\CaS\\players\\ListPlayer.txt";
+    private static final Path FILE_NAME = Paths.get(
+            "D:\\Google\\Project\\Java\\JavaRushTasks\\MyProject\\src\\Games\\CaS\\players\\ListPlayer.txt");
     public static LinkedHashSet<Player> listPlayers;
     static {
         listPlayers = loadList();
@@ -179,7 +181,7 @@ public class Model {
      * The method save list players.
      */
     public synchronized static void saveList() {
-        try(ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(FILE_NAME)))
+        try(ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(FILE_NAME.toString())))
         {
             oos.writeObject(listPlayers);
             oos.flush();
@@ -197,9 +199,9 @@ public class Model {
      * @return list players.
      */
     public synchronized static LinkedHashSet loadList() {
-        File file = new File(FILE_NAME);
+        File file = new File(FILE_NAME.toString());
         if (file.exists() && !(file.length() == 0)) {
-            try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(FILE_NAME))) {
+            try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(FILE_NAME.toString()))) {
                 return (LinkedHashSet<Player>) ois.readObject();
             } catch (FileNotFoundException e) {
                 e.printStackTrace();

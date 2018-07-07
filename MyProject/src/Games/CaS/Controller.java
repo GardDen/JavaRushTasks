@@ -3,6 +3,10 @@ package Games.CaS;
 import Games.CaS.players.Bot;
 import Games.CaS.players.Player;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import static Games.CaS.ConcoleHelper.*;
 import static Games.CaS.Model.listPlayers;
 import static Games.CaS.Model.saveList;
@@ -32,32 +36,16 @@ public class Controller {
             //Выбор пункта меню
             switch (readString("Введите порядковый номер строки:")) {
                 case "1":
-                    game();
+                    newGame();
                     break;
                 case "2":
-                    writeMessage(".-=***Список лидеров***=-.");
-                    if (!listPlayers.isEmpty()) {
-                        String s = String.format("%-10s  %s  %4s  %4s  %4s", "Игрок", "     ", "Loss", "Win", "%Win");
-                        writeMessage(s);
-                        for (Player player : listPlayers) {
-                            writeMessage(player.toString());
-                        }
-                    } else {
-                        writeMessage("Список пуст.");
-                    }
+                    leaderBoards();
                     break;
                 case "3":
-                    writeMessage("Выбор профиля");
-                    selectProfiles();
+                    profiles();
                     break;
                 case "4":
-                    writeMessage("Options:");
-                    writeMessage("Выбор языка:\n" +
-                        "1 русский\n" +
-                        "2 english\n" +
-                        "Выберите язык:");
-                    setLanguage();
-                    writeMessage("Выбран язык - " + language);
+                    options();
                     break;
                 case "5":
                     isExit = true;
@@ -90,9 +78,11 @@ public class Controller {
      * - pick who move first
      * - implents all move
      */
-    public void game() {
+    public void newGame() {
         String answer = readString("Желаете поменять профиль? Y/N");
-        if (answer.equals("N")) {
+        List<String> listNo = new ArrayList<>(Arrays.asList("нет", "не", "н", "n", "no", "net", "not"));
+        List<String> listYes = new ArrayList<>(Arrays.asList("да", "д", "y", "yes"));
+        if (listNo.contains(answer.toLowerCase())) {
             writeMessage(player1.toString() + " против " + player2.toString());
             printField();
             //Рандомный вобор кто ходит первый
@@ -115,18 +105,46 @@ public class Controller {
             writeMessage("Конец игры.");
             model.resetModel();
             saveList();
-        } else {
-            selectProfiles();
-            game();
+        }
+        if (listYes.contains(answer.toLowerCase())) {
+            profiles();
+            newGame();
+        } else if (!(player1.getType().equals("bot") && player2.getType().equals("bot"))){
+            ConcoleHelper.writeMessage("Введен неверный ответ.");
         }
     }
 
-    public void selectProfiles() {
+    public void leaderBoards() {
+        writeMessage(".-=***Список лидеров***=-.");
+        if (!listPlayers.isEmpty()) {
+            String s = String.format("%-10s  %s  %4s  %4s  %4s", "Игрок", "     ", "Loss", "Win", "%Win");
+            writeMessage(s);
+            for (Player player : listPlayers) {
+                writeMessage(player.toString());
+            }
+        } else {
+            writeMessage("Список пуст.");
+        }
+    }
+
+    public void profiles() {
+        writeMessage("Выбор профиля");
         player1 = model.selectPlayer();
         writeMessage("Профиль " + player1.getName() + " активирован.");
         player2 = model.selectSecondPlayer(player1);
         writeMessage("Профиль " + player2.getName() + " активирован.");
     }
+
+    public void options() {
+        writeMessage("Options:");
+        writeMessage("Выбор языка:\n" +
+                "1 русский\n" +
+                "2 english\n" +
+                "Выберите язык:");
+        setLanguage();
+        writeMessage("Выбран язык - " + language);
+    }
+
 
     /**
      * 4.

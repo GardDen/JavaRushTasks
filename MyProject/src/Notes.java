@@ -1,5 +1,4 @@
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -9,7 +8,7 @@ import java.util.List;
  * Created by 1 on 16.03.2017.
  * Данный класс является заметкой,  в который я записываю различные интересные и полезные куски кода
  */
-public class Info {
+public class Notes {
     public static void main(String[] args) {
         /** Выводит сеписок всех файлов в корневом катологе
          */
@@ -64,7 +63,7 @@ public class Info {
             fileReader.close();
         }
         catch (IOException e){
-            System.out.println("Ошибка чтене из файла: " + e.toString());
+            System.out.println("Ошибка чтения из файла: " + e.toString());
         }
     }
 }

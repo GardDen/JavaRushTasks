@@ -1,4 +1,4 @@
-package com.javarush.task.task31.task3110.exception;
+package Archiver.exception;
 
 /**
  * не сможем найти путь, в который нужно распаковать архив, или путь к файлу,

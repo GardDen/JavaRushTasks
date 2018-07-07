@@ -24,23 +24,14 @@ public enum Command {
         this.english = english;
     }
 
-    public String getRussian() {
-        return russian;
-    }
-
-    public String getEnglish() {
-        return english;
-    }
-
-
     public String toSelectTheLanguage(String language) {
         switch (language) {
             case "русский":
-                return getRussian();
+                return russian;
             case "english":
-                return getEnglish();
+                return english;
             default:
-                return getEnglish();
+                return english;
         }
     }
 }

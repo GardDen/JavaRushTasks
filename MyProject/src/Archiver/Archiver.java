@@ -1,9 +1,15 @@
-package com.javarush.task.task31.task3110;
+package Archiver;
 
-import com.javarush.task.task31.task3110.exception.WrongZipFileException;
+import Archiver.exception.WrongZipFileException;
 
 import java.io.IOException;
 
+/**
+ * Доработка:
+ * 1. Графический интерфейс
+ * 2. Добавление не файлов, а целой папки
+ * 3. Удаление не файла а целой папки(возможно уже работает)
+ */
 public class Archiver {
     /**
      * База.
