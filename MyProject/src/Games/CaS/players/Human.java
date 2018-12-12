@@ -8,7 +8,6 @@ import static Games.CaS.ConcoleHelper.readNumberTile;
  * Created by 1 on 03.09.2017.
  */
 public class Human extends Player {
-    private static final long serialVersionUID = 1L;
 
     public Human(String name) {
         setName(name);
@@ -16,6 +15,7 @@ public class Human extends Player {
     }
 
     /**
+     * Переопределяем мето класса Player.
      * Реализует ход игрока. Записывает в выбранную позицию крестик и выводит результат.
      */
     @Override

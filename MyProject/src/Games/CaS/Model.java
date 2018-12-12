@@ -13,7 +13,7 @@ import static Games.CaS.ConcoleHelper.readNumber;
 import static Games.CaS.ConcoleHelper.readString;
 import static Games.CaS.ConcoleHelper.writeMessage;
 import static Games.CaS.players.Player.getPlayersByType;
-import static Games.CaS.players.Player.printListPlayersByType;
+import static Games.CaS.players.Player.printListOfPlayersOfACetrainType;
 
 /**
  * Created by 1 on 01.09.2017.
@@ -27,12 +27,17 @@ public class Model {
     public static LinkedHashSet<Player> listPlayers;
     static {
         listPlayers = loadList();
+        if (listPlayers.size() < 2) {
+            listPlayers.add(new Bot("Bot#1"));
+            listPlayers.add(new Bot("Bot#2"));
+        }
     }
 
     private Cell[][] field = new Cell[FIELD_WIDTH][FIELD_HEIGHT];
 
     public Model() {
         resetModel();
+
     }
 
     /**
@@ -51,7 +56,7 @@ public class Model {
      * А также, если игра закончена, то изменяет данные игроков
      * @return true если игра окончена
      */
-    public boolean isGameOver(Player playerWin, Player playerLoser) {
+    public boolean isGameEnd(Player playerWin, Player playerLoser) {
         boolean gameOver = false;
         int countNotEmpty = 0;//количество занятых клеток
         //цикл считает сколько клеток занято
@@ -114,10 +119,11 @@ public class Model {
      * @return type players as text.
      */
     public String selectType() {
-        String type;
+        String type = "";
         int numberType = readNumber("Выберите тип игрока:\n" +
                 "1 Человек\n" +
                 "2 Бот\n" +
+                "3 Выйти в меню\n" +
                 "Введите число:");
         switch (numberType) {
             case 1:
@@ -125,6 +131,9 @@ public class Model {
                 break;
             case 2:
                 type = " bot ";
+                break;
+            case 3:
+                System.out.println("Сюда нужно вставить код перехода по метке, пока я не знаю как это делать");
                 break;
             default:
                 writeMessage("Неверный быбор, попробуйте ещё раз.");
@@ -140,7 +149,7 @@ public class Model {
      */
     public Player selectPlayer(){
         String type = selectType();
-        printListPlayersByType(type);
+        printListOfPlayersOfACetrainType(type);
         String name = readString("Введите имя:");
         Player player;
         switch (type) {

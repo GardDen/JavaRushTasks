@@ -6,7 +6,6 @@ import Games.CaS.Controller;
  * Created by 1 on 03.09.2017.
  */
 public class Bot extends Player {
-    private static final long serialVersionUID = 1L;
 
     public Bot(String name) {
         setName(name);

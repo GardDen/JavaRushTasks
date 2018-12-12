@@ -6,7 +6,7 @@ package Games.CaS;
  */
 public enum Command {
     NEW_GAME("Новая игра", "New Games"),
-    LEADERBOARDS("Список лидеров", "Leaderboards"),
+    LEADER_BOARDS("Список лидеров", "Leaderboards"),
     PROFILES("Профиль", "Profiles"),
     OPTIONS("Настройки", "Options"),
     EXIT("Выход", "Exit");
@@ -33,5 +33,9 @@ public enum Command {
             default:
                 return english;
         }
+    }
+
+    public String getName(Controller controller) {
+        return this.toSelectTheLanguage(controller.getLanguage()).toUpperCase();
     }
 }

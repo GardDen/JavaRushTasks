@@ -1,10 +1,10 @@
 package Games.CaS;
 
-import Games.CaS.players.Bot;
 import Games.CaS.players.Player;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 
 import static Games.CaS.ConcoleHelper.*;
@@ -16,20 +16,24 @@ import static Games.CaS.Model.saveList;
  */
 public class Controller {
     private static boolean isExit = false;
-    private Player player1 = new Bot("bot#1");
-    private Player player2 = new Bot("bot#2");
-
-    private static String language = "english";
-
-
+    private Player player1;
+    private Player player2;
+    private List<String> listNo = new ArrayList<>(Arrays.asList("нет", "не", "н", "n", "no", "net", "not"));
+    private List<String> listYes = new ArrayList<>(Arrays.asList("да", "д", "y", "yes"));
+    private String language = "english";
     private Model model;
     private View view;
 
     public Controller(Model model) {
         this.model = model;
         view = new View(this);
+        Iterator<Player> iterator = listPlayers.iterator();
+        player1 = iterator.next();
+        player2 = iterator.next();
+
     }
 
+    @Deprecated
     public void menu() {
         while (!isExit) {
             printMenu(language);
@@ -59,10 +63,7 @@ public class Controller {
         }
     }
 
-    /**
-     * 0.
-     * @param language
-     */
+    @Deprecated
     public void printMenu(String language) {
         writeMessage("\n.-=***\\ Crosses and Zeros /***=-.\n" +
                 "X O X O X O X O X O X O X O X O X\n");
@@ -72,52 +73,50 @@ public class Controller {
         writeMessage(" ");
     }
 
-    /**
-     * 1.
-     * The method implements next action:
-     * - pick who move first
-     * - implents all move
-     */
     public void newGame() {
         String answer = readString("Желаете поменять профиль? Y/N");
-        List<String> listNo = new ArrayList<>(Arrays.asList("нет", "не", "н", "n", "no", "net", "not"));
-        List<String> listYes = new ArrayList<>(Arrays.asList("да", "д", "y", "yes"));
-        if (listNo.contains(answer.toLowerCase())) {
-            writeMessage(player1.toString() + " против " + player2.toString());
-            printField();
-            //Рандомный вобор кто ходит первый
-            Player playerTemp;
-            int random = 0 + (int) (Math.random() * 2);
-            if (random == 0) {
-                playerTemp = player1;
-                player1 = player2;
-                player2 = playerTemp;
-            }
-
-            //Игровой процесс
-            do {
-                //view.repaint();
-                player1.move(this, "X");
-                if (!model.isGameOver(player1, player2)) {
-                    player2.move(this, "O");
-                } else break;
-            } while (!model.isGameOver(player2, player1));
-            writeMessage("Конец игры.");
-            model.resetModel();
-            saveList();
-        }
-        if (listYes.contains(answer.toLowerCase())) {
-            profiles();
-            newGame();
-        } else if (!(player1.getType().equals("bot") && player2.getType().equals("bot"))){
+        if (!listNo.contains(answer) && !listYes.contains(answer)) {
             ConcoleHelper.writeMessage("Введен неверный ответ.");
+            newGame();
+        } else if (listYes.contains(answer)) {
+            profiles();
+        }
+        game();
+    }
+
+    public void game() {
+        //Рандомный вобор кто ходит первый
+        Player playerTemp;
+        int random = 0 + (int) (Math.random() * 2);
+        if (random == 0) {
+            playerTemp = player1;
+            player1 = player2;
+            player2 = playerTemp;
+        }
+
+        //Игровой процесс
+        writeMessage(player1.getName() + " против " + player2.getName());
+        printField();
+        do {
+            //view.repaint();
+            player1.move(this, "X");
+            if (!model.isGameEnd(player1, player2)) {
+                player2.move(this, "O");
+            } else break;
+        } while (!model.isGameEnd(player2, player1));
+        writeMessage("Конец игры.");
+        saveList();
+        model.resetModel();
+        String answer = readString("Ещё партию? Y/N");
+        if (listYes.contains(answer.toLowerCase())) {
+            game();
         }
     }
 
     public void leaderBoards() {
         writeMessage(".-=***Список лидеров***=-.");
         if (!listPlayers.isEmpty()) {
-            String s = String.format("%-10s  %s  %4s  %4s  %4s", "Игрок", "     ", "Loss", "Win", "%Win");
+            String s = String.format("%-10s  %s  %4s  %4s  %4s %4s", "Игрок", "     ", "Loss", "Win", "%Win", "CountGame");
             writeMessage(s);
             for (Player player : listPlayers) {
                 writeMessage(player.toString());
@@ -163,6 +162,7 @@ public class Controller {
                 setLanguage();
                 break;
         }
+        view.repaint();
     }
 
     /**
@@ -184,6 +184,10 @@ public class Controller {
 
     public Model getModel() {
         return model;
+    }
+
+    public String getLanguage() {
+        return language;
     }
 
 

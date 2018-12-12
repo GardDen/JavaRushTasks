@@ -18,11 +18,11 @@ public abstract class Player implements Serializable {
     private String type;//human or bot
     private int countLoss = 0;
     private int countWin = 0;
-    transient private double winningPercentage;
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;//хз как этим пользоваться, номер от балды...
+
 
      /**
-     * The method retuen list players a certain type.
+     * Возвращает список игроков выбранного типа.
      * @param type - type player
      * @return list players a certain type.
      */
@@ -39,14 +39,14 @@ public abstract class Player implements Serializable {
     }
 
     /**
-     * the method.
+     * Печатает список игроков определенного типа.
      * @param type
      * @return true if have player find type
      */
-    public static boolean printListPlayersByType(String type) {
+    public static boolean printListOfPlayersOfACetrainType(String type) {
         boolean flag = false;
         List<Player> list = getPlayersByType(type);
-        System.out.print ("Игроки типа " + type);
+        System.out.print ("Игроки типа - " + type);
         if (!list.isEmpty()) {
             flag = true;
             writeMessage(":");
@@ -60,15 +60,15 @@ public abstract class Player implements Serializable {
     }
 
     public void move(Controller controller, String value) {
-        writeMessage("Ходит " + this.getName() + ":");
+        writeMessage("Ходит " + this.getName() + ".");
     }
 
     @Override
     public String toString() {
         String name = this.name.codePointCount(0, this.name.length()) > 10 ?
                 this.name.substring(0, this.name.offsetByCodePoints(0, 10)) : this.name;
-        String result = String.format("%-10s  %-5s  %04d  %04d  %3.0f",
-                name, type, countLoss, countWin, this.getWinningPercentage());
+        String result = String.format("%-10s  %-5s  %4d  %4d  %4.0f %9d",
+                name, type, countLoss, countWin, getWinningPercentage(), getCountGame());
         return  result;
     }
 
@@ -111,24 +111,21 @@ public abstract class Player implements Serializable {
         return name;
     }
 
-    public int getCountWin() {
-        return countWin;
-    }
-
-    public int getCountLoss() {
-        return countLoss;
-    }
-
     public Double getWinningPercentage() {
+        Double winningPercentage;
         try {
-            winningPercentage = (double)countWin / (countWin + countLoss) * 100;
+            winningPercentage = (double)countWin / getCountGame() * 100;
         } catch (ArithmeticException exc) {
-            winningPercentage = 0;
+            winningPercentage = 0.0;
         }
         return winningPercentage;
     }
 
     public String getType() {
         return type;
+    }
+
+    public int getCountGame() {
+        return countLoss + countWin;
     }
 }

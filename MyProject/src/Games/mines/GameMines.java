@@ -21,8 +21,8 @@ public class GameMines extends JFrame
 {
     final String TITLE_OF_PROGRAM = "Сапер";
     final String SIGN_OF_FLAG = "f";
-    final int BLOCK_SIZE = 30;
-    final int FIELD_SIZE = 30;
+    final int BLOCK_SIZE = 15;
+    final int FIELD_SIZE = 15;
     final int FIELD_DX = 6;
     final int FIELD_DY = 28 + 17;
     final int START_LOCATION = 200;
@@ -33,8 +33,8 @@ public class GameMines extends JFrame
     Cell[][] field = new Cell[FIELD_SIZE][FIELD_SIZE];
     Random random = new Random();
     int countOpenedCells;// количество открытых ячеек
-    boolean youWon, bangMine;
-    int bangX, bangY;
+    public boolean youWon, bangMine;
+    public int bangX, bangY;
 
     public static void main(String[] args){
         new GameMines();
@@ -87,8 +87,11 @@ public class GameMines extends JFrame
         if(field[y][x].getCountBomb() > 0 || bangMine) return;// если ячейка не пуста
         //если все проверки успешно пройдены, то ячейка пустая и выполняется открытие других пустых ячеек вокруг
         else{
-            for (int dx = -1; dx < 2; dx++)
-                for (int dy = -1; dy < 2; dy++) openCells(x + dx, x + dy);
+            for (int dx = -1; dx < 2; dx++) {
+                for (int dy = -1; dy < 2; dy++) {
+                    openCells(x + dx, x + dy);
+                }
+            }
         }
     }
 
@@ -106,25 +109,58 @@ public class GameMines extends JFrame
             countMines++;
         }
 
-        for(x = 0; x < FIELD_SIZE; x++)//  счетчик мин вокруг ячейки,
-            for (y = 0; y < FIELD_SIZE;y++ )
-                if(!field[y][x].isMined()){
+        //  счетчик мин вокруг ячейки,
+        for(x = 0; x < FIELD_SIZE; x++) {
+            for (y = 0; y < FIELD_SIZE; y++) {
+                if (!field[y][x].isMined()) {
                     int count = 0;
-                    for(int dx = -1; dx < 2; dx++)
-                        for (int dy = -1; dy < 2; dy++){
+                    for (int dx = -1; dx < 2; dx++)
+                        for (int dy = -1; dy < 2; dy++) {
                             int nX = x + dx;
                             int nY = y + dy;
-                            if (nX < 0 || nY < 0 || nX > FIELD_SIZE - 1 || nY > FIELD_SIZE - 1){
+                            if (nX < 0 || nY < 0 || nX > FIELD_SIZE - 1 || nY > FIELD_SIZE - 1) {
                                 nX = x;
                                 nY = y;
                             }
-                            count+= (field[nY][nX].isMined() ? 1 : 0);
+                            count += (field[nY][nX].isMined() ? 1 : 0);
                         }
                     field[y][x].setCountBomb(count);
                 }
+            }
+        }
+    }
+
+
+
+    class TimerLabel extends JLabel{
+        Timer timer = new Timer();
+
+        TimerLabel(){
+            timer.scheduleAtFixedRate(timerTask, 0, 1000);
+        }
+
+        TimerTask timerTask = new TimerTask(){
+            volatile int time;
+            Runnable refresher = new Runnable()
+            {
+                public  void run(){
+                    TimerLabel.this.setText(String.format("%02d:%02d", time / 60, time % 60 ));
+                }
+            };
+            public void run(){
+                time++;
+                SwingUtilities.invokeLater(refresher);
+            }
+        };
+        void stopTimer(){
+            timer.cancel();
+        }
     }
 
     class Cell{
+        public Cell() {
+        }
+
         private boolean isOpen, isMine, isFlag;
         private int countBombNear;
         void open(){
@@ -172,36 +208,11 @@ public class GameMines extends JFrame
                     if(isFlag) paintString(g, SIGN_OF_FLAG, x, y, Color.red);// рисует флаг
                 }
             } else
-                if (isMine) paintBomp(g, x, y, bangMine? Color.red : Color.black);// рисует бомбу при взрыве
-                else
-                    if (countBombNear > 0)
-                        paintString(g, Integer.toString(countBombNear), x, y, new Color(COLOR_OF_NUMBERS[
-                                countBombNear -1]));// рисует количество бомб вокруг, определенного цвета.
-        }
-    }
-
-    class TimerLabel extends JLabel{
-        Timer timer = new Timer();
-
-        TimerLabel(){
-            timer.scheduleAtFixedRate(timerTask, 0, 1000);
-        }
-
-        TimerTask timerTask = new TimerTask(){
-            volatile int time;
-            Runnable refresher = new Runnable()
-            {
-                public  void run(){
-                    TimerLabel.this.setText(String.format("%02d:%02d", time / 60, time % 60 ));
-                }
-            };
-            public void run(){
-                time++;
-                SwingUtilities.invokeLater(refresher);
-            }
-        };
-        void stopTimer(){
-            timer.cancel();
+            if (isMine) paintBomp(g, x, y, bangMine? Color.red : Color.black);// рисует бомбу при взрыве
+            else
+            if (countBombNear > 0)
+                paintString(g, Integer.toString(countBombNear), x, y, new Color(COLOR_OF_NUMBERS[
+                        countBombNear -1]));// рисует количество бомб вокруг, определенного цвета.
         }
     }
 
