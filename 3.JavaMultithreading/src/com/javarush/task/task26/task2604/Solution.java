@@ -12,16 +12,21 @@ public class Solution extends Thread {
 
     private static final AtomicInteger createdThreadIndex = new AtomicInteger();
     private static final AtomicInteger aliveThreadIndex = new AtomicInteger();
-    private static final Logger log = Logger.getAnonymousLogger();
 
-    private static boolean debugLifecycle = false;
-
-    public Solution(Runnable runnable) {
-        this(runnable, DEFAULT_JAVARUSH_THREAD_NAME);
+    static {
+        System.setProperty("java.util.logging.SimpleFormatter.format", "%1$tF %1$tT %4$s %2$s %5$s%6$s%n");
     }
 
-    public Solution(Runnable runnable, String name) {
-        super(runnable, name + "-" + createdThreadIndex.incrementAndGet());
+    private static final Logger log = Logger.getLogger(Solution.class.getName());
+
+    volatile private static boolean debugSession = true;
+
+    public Solution() {
+        this(DEFAULT_JAVARUSH_THREAD_NAME);
+    }
+
+    public Solution(String name) {
+        super(name + "-" + createdThreadIndex.incrementAndGet());
 
         setUncaughtExceptionHandler(new UncaughtExceptionHandler() {
             public void uncaughtException(Thread t, Throwable e) {
@@ -31,34 +36,41 @@ public class Solution extends Thread {
     }
 
     public static void main(String[] args) {
-        new Solution(new Runnable() {
-            @Override
-            public void run() {
-                System.out.println("test JavaRush Runnable for Solution class");
-            }
-        }).start();
-
-
-        new Solution(new Runnable() {
-            @Override
-            public void run() {
-                throw new RuntimeException("Oops");
-            }
-        }).start();
+        new Solution().start();
+        new Solution().start();
+        new Solution().start();
     }
 
     public void run() {
-        if (debugLifecycle) {
-            log.log(Level.FINE, "Created " + getName());
+        boolean debug = debugSession;
+        if (debug) {
+            log.log(Level.INFO, "Created " + getName());
         }
         try {
             aliveThreadIndex.incrementAndGet();
-            super.run();
+            log.log(Level.INFO, "Thread " + getName() + " in progress...");
+            throw new RuntimeException("Oops " + getName());
         } finally {
             aliveThreadIndex.decrementAndGet();
-            if (debugLifecycle) {
-                log.log(Level.FINE, "Exiting " + getName());
+            if (debug) {
+                log.log(Level.INFO, "Exiting " + getName());
             }
         }
+    }
+
+    public static int getThreadsCreated() {
+        return createdThreadIndex.get();
+    }
+
+    public static int getThreadsAlive() {
+        return aliveThreadIndex.get();
+    }
+
+    public static boolean isDebug() {
+        return debugSession;
+    }
+
+    public static void setDebug(boolean ds) {
+        debugSession = ds;
     }
 }

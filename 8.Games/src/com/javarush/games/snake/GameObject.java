@@ -8,4 +8,12 @@ public class GameObject {
         this.x = x;
         this.y = y;
     }
+
+    @Override
+    public String toString() {
+        return "GameObject{" +
+                "x=" + x +
+                ", y=" + y +
+                '}';
+    }
 }

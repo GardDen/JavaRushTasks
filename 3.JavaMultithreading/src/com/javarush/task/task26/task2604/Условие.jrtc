@@ -1,6 +1,4 @@
-taskKey="com.javarush.task.task26.task2604"
-
-Для того, чтобы усовершенствовать ум, надо больше размышлять, чем заучивать
+taskKey="com.javarush.task.task26.task2604"\n\nДля того, чтобы усовершенствовать ум, надо больше размышлять, чем заучивать
 
 Расставь volatile там, где необходимо.
 
@@ -10,7 +8,7 @@ taskKey="com.javarush.task.task26.task2604"
 2.	Класс Solution должен содержать private static final поле AtomicInteger createdThreadIndex.
 3.	Класс Solution должен содержать private static final поле AtomicInteger aliveThreadIndex.
 4.	Класс Solution должен содержать private static final поле Logger log.
-5.	Класс Solution должен содержать private static поле boolean debugLifecycle.
+5.	Класс Solution должен содержать private static поле boolean debugSession.
 6.	Расставь volatile там, где необходимо.
 
 

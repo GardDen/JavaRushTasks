@@ -1,6 +1,4 @@
-taskKey="com.javarush.task.task26.task2605"
-
-Трудолюбие - душа всякого дела и залог благосостояния
+taskKey="com.javarush.task.task26.task2605"\n\nТрудолюбие - душа всякого дела и залог благосостояния
 
 Расставь volatile там, где необходимо.
 

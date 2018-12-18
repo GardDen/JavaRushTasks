@@ -3,6 +3,7 @@ package com.javarush.games.snake;
 import com.javarush.engine.cell.*;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class Snake extends GameObject {
@@ -38,11 +39,16 @@ public class Snake extends GameObject {
 
     public void move() {
         GameObject head = createNewHead();
-        if (head.x < 0 || head.x > SnakeGame.WIDTH || head.y < 0 || head.y > SnakeGame.HEIGHT) {
+        if (head.x < 0 || head.x >= SnakeGame.WIDTH || head.y < 0 || head.y >= SnakeGame.HEIGHT) {
             isAlive = false;
             return;
         }
 
+        //добавление головы
+        ArrayList<GameObject> dest = new ArrayList<>(snakeParts);
+        snakeParts.clear();
+        snakeParts.add(head);
+        snakeParts.addAll(dest);
 
         removeTail();
     }
